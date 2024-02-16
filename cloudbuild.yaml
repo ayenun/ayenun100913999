@@ -1,0 +1,25 @@
+steps:
+  # Step 1: Use the Docker Cloud Builder image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/100913999:$COMMIT_SHA', '.']
+    
+  # Step 2: Push the Docker image to your Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/ayenun-100913999:$COMMIT_SHA']
+
+options:
+  # Set defaultLogsBucketBehavior to REGIONAL_USER_OWNED_BUCKET
+  logging:
+    # Creates a new bucket in the same region as the build project
+    # to store build logs.
+    cloudBuildLogLevel: INFO
+    cloudBuildLogsBucket: 'gs://$PROJECT_ID_cloudbuild/logs'
+
+# Create a Cloud Build Trigger
+triggers:
+  # Trigger the build when a push occurs to the specified branch
+  - name: 'dc-ayenun-100913999'
+    branch: 'main'
+    build: 'cloudbuild.yaml'
+    # Require manual approval before build execution
+    manual: true
