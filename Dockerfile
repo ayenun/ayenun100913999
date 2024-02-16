@@ -27,7 +27,3 @@ EXPOSE 3000
 
 # Set the default execution command
 CMD ["node", "src/index.js"]
-
-
-
-
